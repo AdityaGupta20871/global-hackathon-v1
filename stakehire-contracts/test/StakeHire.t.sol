@@ -218,8 +218,8 @@ contract StakeHireTest is Test {
         uint256 companyStake = stakeHire.calculateCompanyStake(company1, false);
         
         vm.startPrank(company1);
-        stakeHire.postJob{value: companyStake}(1, "Job1", "Desc1", "Req1", 100000, 0.01 ether, 50, false);
-        stakeHire.postJob{value: companyStake}(2, "Job2", "Desc2", "Req2", 100000, 0.01 ether, 50, false);
+        stakeHire.postJob{value: companyStake}("Job1", "Desc1", "Req1", 100000, 0.01 ether, 50, false);
+        stakeHire.postJob{value: companyStake}("Job2", "Desc2", "Req2", 100000, 0.01 ether, 50, false);
         vm.stopPrank();
         
         // First application
@@ -386,7 +386,7 @@ contract StakeHireTest is Test {
         
         // Get initial reputation scores
         (, uint256 companyRepBefore, , , , ) = stakeHire.companies(company1);
-        (uint256 applicantRepBefore, , , , ) = stakeHire.applicants(applicant1);
+        (uint256 applicantRepBefore, , , ) = stakeHire.applicants(applicant1);
         
         // Hire candidate
         vm.prank(company1);
@@ -394,7 +394,7 @@ contract StakeHireTest is Test {
         
         // Check reputation increased
         (, uint256 companyRepAfter, , , , ) = stakeHire.companies(company1);
-        (uint256 applicantRepAfter, , , , ) = stakeHire.applicants(applicant1);
+        (uint256 applicantRepAfter, , , ) = stakeHire.applicants(applicant1);
         
         assertEq(companyRepAfter, companyRepBefore + 10);
         assertEq(applicantRepAfter, applicantRepBefore + 10);

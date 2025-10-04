@@ -262,7 +262,9 @@ contract StakeHire is ReentrancyGuard, Pausable, Ownable {
         job.hiredCandidate = application.applicant;
         
         // Process refunds and bonuses
-        uint256 totalToApplicant = application.stakeAmount + signingBonus;
+        // Applicant already received 50% during review, send remaining 50% + signing bonus
+        uint256 remainingStake = (application.stakeAmount * REVIEWED_APPLICANT_REFUND_BPS) / 10000;
+        uint256 totalToApplicant = remainingStake + signingBonus;
         payable(application.applicant).transfer(totalToApplicant);
         
         // Refund 80% of company stake
@@ -298,11 +300,13 @@ contract StakeHire is ReentrancyGuard, Pausable, Ownable {
         require(job.currentApplicants < job.maxApplicants, "Max applicants reached");
         require(msg.value >= job.applicationFee, "Insufficient stake");
         
-        // Check cooldown
-        require(
-            block.timestamp >= lastApplicationTime[msg.sender] + APPLICATION_COOLDOWN,
-            "Application cooldown active"
-        );
+        // Check cooldown (only if user has applied before)
+        if (lastApplicationTime[msg.sender] > 0) {
+            require(
+                block.timestamp >= lastApplicationTime[msg.sender] + APPLICATION_COOLDOWN,
+                "Application cooldown active"
+            );
+        }
         
         uint256 applicationId = nextApplicationId++;
         

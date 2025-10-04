@@ -1,0 +1,6 @@
+[submodule "stakehire-contracts/lib/openzeppelin-contracts"]
+	path = stakehire-contracts/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "stakehire-contracts/lib/forge-std"]
+	path = stakehire-contracts/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std

@@ -99,7 +99,7 @@ contract ReputationNFT is ERC721, ERC721URIStorage, Ownable {
     /**
      * @notice Mint a new reputation badge
      */
-    function mint(address to, uint256 score) external onlyStakeHireOrOwner {
+    function mint(address to, uint256 score) public onlyStakeHireOrOwner {
         require(to != address(0), "Invalid recipient");
         require(score > 0, "Score must be positive");
         
@@ -295,7 +295,7 @@ contract ReputationNFT is ERC721, ERC721URIStorage, Ownable {
     
     // ============ Internal Functions ============
     
-    function _exists(uint256 tokenId) internal view returns (bool) {
+    function _exists(uint256 tokenId) internal view override returns (bool) {
         return _ownerOf(tokenId) != address(0);
     }
     
